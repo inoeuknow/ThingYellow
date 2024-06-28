@@ -1,0 +1,175 @@
+[include mainsail.cfg]
+
+# ------------------------------------------------------------------------ HEATED BED ----
+[include config/hardware/heated_bed/Fysect_Trident_heated_bed.cfg]
+# ----------------------------------------------------------------------------------------
+
+# ---------------------------------------------------------------- PRINTER KINEMATICS ----
+[include config/kinematics/corexy.cfg]    
+# ----------------------------------------------------------------------------------------
+
+# ---------------------------------------------------------------------- MACHINE AXIS ----
+[include config/hardware/axis/X/TMC/TMC2209.cfg]
+[include config/hardware/axis/X/Fysetc_17HS19_2004S_C_1.8deg.cfg]
+
+[include config/hardware/axis/Y/TMC/TMC2209.cfg]
+[include config/hardware/axis/Y/Fysetc_17HS19_2004S_C_1.8deg.cfg]
+
+[include config/hardware/axis/Z/TMC/TMC2209.cfg]
+[include config/hardware/axis/Z/Fysetc_42HC40_204A_300N84_1.8deg.cfg]
+# ----------------------------------------------------------------------------------------
+
+
+# -------------------------------------------------------------------------- EXTRUDER ----
+[include config/hardware/extruder/galileo2.cfg]
+[include config/hardware/extruder/TMC/TMC2209.cfg]
+# ----------------------------------------------------------------------------------------
+
+# ---------------------------------------------------------------- PRINTER DIMENSIONS ----
+[include config/hardware/axis/size/300mm_Trident.cfg]
+# ----------------------------------------------------------------------------------------
+
+# ----------------------------------------------------------------------------- PROBE ----
+[include config/hardware/probes/voron_tap.cfg]
+# ----------------------------------------------------------------------------------------
+
+# --------------------------------------------------------------------------- DISPLAY ----
+[include config/hardware/display/FYSETC_MINI_i12864.cfg]
+# ----------------------------------------------------------------------------------------
+
+# --------------------------------------------------------------- TEMPERATURE SENSORS ----
+[include config/hardware/temperature_sensor/rpi_temp.cfg]
+[include config/hardware/temperature_sensor/mcu_temp.cfg]
+[include config/hardware/temperature_sensor/toolhead_mcu_temp.cfg]
+[include config/hardware/temperature_sensor/chamber_temp.cfg]
+# ----------------------------------------------------------------------------------------
+
+
+# ------------------------------------------------------------------- LIGHTS AND LEDS ----
+[include config/hardware/light/status_leds.cfg]
+[include config/hardware/light/white_caselights.cfg]
+# ----------------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------ FANS ----
+[include config/hardware/fan/hotend_fan.cfg]
+[include config/hardware/fan/part_fan.cfg]
+[include config/hardware/fan/controller_fan.cfg]
+[include config/hardware/fan/bed_fans.cfg]
+# [include config/hardware/fans/rpi_fan.cfg]
+# ----------------------------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------------- FILTERS ----> You can select multiple lines
+### --------------------------------------------------------------------------------------
+[include config/hardware/filter/exhaust_filter.cfg]
+#[include config/hardware/filter/nevermore_filter.cfg]
+# ----------------------------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------- ACCELEROMETER ----
+[include config/hardware/accelerometer/resonance_tester.cfg]
+#[include config/hardware/accelerometer/adxl345_BTT_SB2209_RP2040.cfg]
+[include config/hardware/accelerometer/adxl345_nozzle.cfg]
+# ----------------------------------------------------------------------------------------
+
+
+# ---------------------------------------------------------------------- INPUT SHAPER ----
+[include config/software/input_shaper.cfg] # Don't forget to calibrate it!
+# ----------------------------------------------------------------------------------------
+
+# --------------------------------------------------------------- FIRMWARE RETRACTION ----
+[include config/software/firmware_rectraction.cfg]
+# ----------------------------------------------------------------------------------------
+
+# --------------------------------------------------------------------------- TILTING ----
+[include config/software/tilting/z_tilt_300mm.cfg]
+# ----------------------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------- BED MESH ----
+[include config/software/bed_mesh/bed_mesh_300mm.cfg]
+# ----------------------------------------------------------------------------------------
+
+
+# ------------------------------------------------------------------- SKEW CORRECTION ----
+[include config/software/skew_correction.cfg] # Don't forget to calibrate it!
+# ----------------------------------------------------------------------------------------
+
+
+[gcode_macro START_FILTER]
+gcode:
+    {% set SPEED = params.SPEED|default(1)|float %}
+    {% set FILTER = params.NAME|default(printer["gcode_macro _USER_VARIABLES"].recirculating_filter_name) %}
+
+    #{% set filter_name = printer["gcode_macro _USER_VARIABLES"].recirculating_filter_name %}
+    SET_FAN_SPEED FAN={FILTER} SPEED={SPEED}
+
+[gcode_macro STOP_FILTER]
+gcode:
+    {% set FILTER = params.NAME|default(printer["gcode_macro _USER_VARIABLES"].recirculating_filter_name) %}
+    SET_FAN_SPEED FAN={FILTER} SPEED=0
+
+[delayed_gcode _STOP_FILTER_DELAYED]
+gcode:
+    {% set FILTER = params.NAME|default(printer["gcode_macro _USER_VARIABLES"].recirculating_filter_name) %}
+    STOP_FILTER NAME=FILTER
+
+# z_offset = -0.265
+
+###################################
+### DO NOT EDIT BELOW THIS LINE ###
+###################################
+[include mcu.cfg]
+[include config/machine.cfg]
+[include overrides.cfg]
+[include variables.cfg]
+
+#*# <---------------------- SAVE_CONFIG ---------------------->
+#*# DO NOT EDIT THIS BLOCK OR BELOW. The contents are auto-generated.
+#*#
+#*# [heater_bed]
+#*# control = pid
+#*# pid_kp = 37.789
+#*# pid_ki = 1.968
+#*# pid_kd = 181.385
+#*#
+#*# [extruder]
+#*# control = pid
+#*# pid_kp = 33.093
+#*# pid_ki = 3.244
+#*# pid_kd = 84.388
+#*#
+#*# [probe]
+#*# z_offset = -0.375
+#*#
+#*# [bed_mesh default]
+#*# version = 1
+#*# points =
+#*# 	0.121250, 0.081875, 0.059375, 0.052500, 0.091250, 0.089375, 0.103750, 0.116875, 0.179375
+#*# 	0.130000, 0.100000, 0.079375, 0.071875, 0.082500, 0.073750, 0.077500, 0.101250, 0.160000
+#*# 	0.103750, 0.098125, 0.071875, 0.025625, 0.035625, 0.052500, 0.085000, 0.058125, 0.095625
+#*# 	0.047500, 0.093750, 0.048750, 0.077500, 0.016875, -0.003125, 0.020000, 0.037500, 0.090000
+#*# 	0.086875, 0.057500, 0.059375, -0.008125, 0.000000, -0.013750, -0.013750, 0.008125, 0.028750
+#*# 	0.060000, 0.053750, 0.069375, 0.046250, 0.079375, 0.002500, 0.034375, 0.021250, 0.064375
+#*# 	0.126250, 0.133750, 0.091875, 0.025000, 0.096875, 0.030625, -0.000625, 0.001250, 0.031250
+#*# 	0.089375, 0.104375, 0.113750, 0.110000, 0.156875, 0.091250, 0.015000, -0.016250, -0.010625
+#*# 	0.097500, 0.115625, 0.070000, 0.153750, 0.133750, -0.035000, -0.027500, -0.035000, 0.023125
+#*# x_count = 9
+#*# y_count = 9
+#*# mesh_x_pps = 2
+#*# mesh_y_pps = 2
+#*# algo = bicubic
+#*# tension = 0.2
+#*# min_x = 25.0
+#*# max_x = 275.0
+#*# min_y = 25.0
+#*# max_y = 275.0
+#*#
+#*# [skew_correction CaliFlower]
+#*# xy_skew = 0.0
+#*# xz_skew = 0.0
+#*# yz_skew = 0.0
+#*#
+#*# [skew_correction calilantern_skew_profile]
+#*# xy_skew = -0.0006010414080285165
+#*# xz_skew = -0.001506139774459025
+#*# yz_skew = 0.001506141469782311

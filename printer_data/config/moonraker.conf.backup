@@ -1,0 +1,23 @@
+########################################################## \
+############# MOONRAKER CONFIG FILE ###################### + --> To configure moonraker... :)
+########################################################## /
+
+[include moonraker/base.conf] # Do not remove this line
+
+
+##### Mainsail update management ----------------------------------
+[include moonraker/mainsail.conf]
+# -----------------------------------------------------------------
+
+
+##### Exclude object pre-processing -------------------------------
+[include moonraker/exclude_object.conf]
+# -----------------------------------------------------------------
+
+##### LED Effects -------------------------------------------------
+[include moonraker/led_effect.conf]
+# -----------------------------------------------------------------
+
+## Klippain Shake&Tune automatic update management ----------------
+[include moonraker/shaketune.conf]
+# -----------------------------------------------------------------
